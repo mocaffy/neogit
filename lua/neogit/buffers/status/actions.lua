@@ -1199,12 +1199,15 @@ end
 M.n_goto_file = function(self)
   return function()
     local item = self.buffer.ui:get_item_under_cursor()
+    local currentWindow = vim.api.nvim_get_current_win()
 
     -- Goto FILE
     if item and item.absolute_path then
       local cursor = translate_cursor_location(self, item)
-      self:close()
-      vim.schedule_wrap(open)("edit", item.absolute_path, cursor)
+      -- self:close()
+      vim.cmd("wincmd h")
+      open("edit", item.absolute_path, cursor)
+      vim.api.nvim_set_current_win(currentWindow)
       return
     end
 
